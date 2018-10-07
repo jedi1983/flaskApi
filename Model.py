@@ -11,6 +11,45 @@ db = SQLAlchemy()
 class NewsArticle(db.Model):
     __tablename__ = 'news'
     id = db.Column(db.Integer, primary_key = True)
+    article = db.Column(db.String(700), nullable = False)
+    status = db.Column(db.Integer, nullable = False)
+    creation_date = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable = False)
+
+    def __init__(self,article,status):
+        self.article = article
+        self.status = status
+
+
+class Topics(db.Model):
+    __tablename__ = 'topics'
+    id = db.Column(db.Integer, primary_key = True)
+    topicname = db.Column(db.String(50), nullable = False)
+    creation_date = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable = False)
+
+    def __init__(self, topicname):
+        self.topicname = topicname
+
+class NewsStatus(db.Model):
+    __tablename__ = 'status'
+    id = db.Column(db.Integer, primary_key = True)
+    statuscode = db.Column(db.String(10),nullable = False)
+    creation_date = db.Column(db.TIMESTAMP, server_default = db.func.current_timestamp(), nullable = False)
+
+    def __init__(self, statuscode):
+        self.statuscode = statuscode
+
+class NewsTopic(db.Model):
+    __tablename__='newstopic'
+    id = db.Column(db.Integer, primary_key = True)
+    idNews = db.Column(db.Integer, nullable = False)
+    idTopic = db.Column(db.Integer, nullable = False)
+    creation_date = db.Column(db.TIMESTAMP, server_default = db.func.current_timestamp(), nullable = False)
+
+    def __init__(self, idNews, idTopic):
+        self.idNews = idNews
+        self.idTopic = idTopic
+
+# TODO : Need to Add Schema for validation
 
 
 # class Comment(db.Model):
