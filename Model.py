@@ -19,7 +19,6 @@ class NewsArticle(db.Model):
         self.article = article
         self.status = status
 
-
 class Topics(db.Model):
     __tablename__ = 'topics'
     id = db.Column(db.Integer, primary_key = True)
@@ -49,38 +48,24 @@ class NewsTopic(db.Model):
         self.idNews = idNews
         self.idTopic = idTopic
 
-# TODO : Need to Add Schema for validation
+class NewsArticleSchema(ma.Schema):
+    id = fields.Integer()
+    article = fields.String()
+    status = fields.Integer()
+    creation_date = fields.DateTime()
 
+class TopicsSchema(ma.Schema):
+    id = fields.Integer()
+    topicname = fields.String()
+    creation_date = fields.DateTime()
+    
+class NewsStatusSchema(ma.Schema):
+    id = fields.Integer()
+    statuscode = fields.String()
+    creation_date = fields.DateTime()
 
-# class Comment(db.Model):
-#     __tablename__ = 'comments'
-#     id = db.Column(db.Integer, primary_key=True)
-#     comment = db.Column(db.String(250), nullable=False)
-#     creation_date = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
-#     category_id = db.Column(db.Integer, db.ForeignKey('categories.id', ondelete='CASCADE'), nullable=False)
-#     category = db.relationship('Category', backref=db.backref('comments', lazy='dynamic' ))
-
-#     def __init__(self, comment, category_id):
-#         self.comment = comment
-#         self.category_id = category_id
-
-
-# class Category(db.Model):
-#     __tablename__ = 'categories'
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(150), unique=True, nullable=False)
-
-#     def __init__(self, name):
-#         self.name = name
-
-
-# class CategorySchema(ma.Schema):
-#     id = fields.Integer()
-#     name = fields.String(required=True)
-
-
-# class CommentSchema(ma.Schema):
-#     id = fields.Integer(dump_only=True)
-#     category_id = fields.Integer(required=True)
-#     comment = fields.String(required=True, validate=validate.Length(1))
-#     creation_date = fields.DateTime()
+class NewsTopicSchema(ma.Schema):
+    id = fields.Integer()
+    idNews = fields.Integer()
+    idTopic = fields.Integer()
+    creation_date = fields.DateTime()

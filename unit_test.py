@@ -2,103 +2,42 @@ import unittest
 import requests
 import json
 import sys
-
-
+import time
 
 class NewsTest(unittest.TestCase):
 
-	def testNewsGetAll(self):
-		response = requests.get('http://localhost:5000/api/v1/News')
-		self.assertEqual(response.json(), {'message': 'Hello, World!'})
+	def testStatusData(self):
+		data = {"statuscode": "draft"}
+		resp = requests.post('http://localhost:5000/api/v1/Status',json=data)
+		self.assertEqual(resp.status_code, 201)
+		self.assertIn('draft',str(resp.json()['data']))
+		resp = requests.get('http://localhost:5000/api/v1/Status')
+		self.assertEqual(resp.status_code,200)
+		self.assertIn('draft',str(resp.json()['data']))
+		data = {"id": 1,"statuscode": "test"}
+		resp = requests.put('http://localhost:5000/api/v1/Status',json=data)
+		self.assertEqual(resp.status_code, 204)
+		data = {"id": 1}
+		resp = requests.delete('http://localhost:5000/api/v1/Status',json=data)
+		self.assertEqual(resp.status_code, 204)
 
-	def testNewsGetById(self):
+	def testTopicsData(self):
+		data = {"topicname": "politik"}
+		resp = requests.post('http://localhost:5000/api/v1/Topic',json=data)
+		self.assertEqual(resp.status_code, 201)
+		self.assertIn('politik',str(resp.json()['data']))
+		resp = requests.get('http://localhost:5000/api/v1/Topic')
+		self.assertEqual(resp.status_code,200)
+		self.assertIn('politik',str(resp.json()['data']))
+		data = {"id": 1,"topicname": "KPU"}
+		resp = requests.put('http://localhost:5000/api/v1/Topic',json=data)
+		self.assertEqual(resp.status_code, 204)
+		data = {"id": 1}
+		resp = requests.delete('http://localhost:5000/api/v1/Topic',json=data)
+		self.assertEqual(resp.status_code, 204)
+
+	def testNewsData(self):
 		pass
-
-	def testNewsGetByTopicId(self):
-		pass
-
-	def testNewsAddNewNews(self):
-		pass
-
-	def testTopicGetAll(self):
-		pass
-
-	def testTopicGetTopicById(self):
-		pass
-
-	def testTopicAddNewTopic(self):
-		pass
-
-    # def setUp(self):
-    #     """Define test variables and initialize app."""
-    #     self.app = create_app(config_name="testing")
-    #     self.client = self.app.test_client
-    #     self.bucketlist = {'name': 'Go to Borabora for vacation'}
-
-    #     # binds the app to the current context
-    #     with self.app.app_context():
-    #         # create all tables
-    #         db.create_all()
-
-
-    # def test_bucketlist_creation(self):
-    #     """Test API can create a bucketlist (POST request)"""
-    #     res = self.client().post('/bucketlists/', data=self.bucketlist)
-    #     self.assertEqual(res.status_code, 201)
-    #     self.assertIn('Go to Borabora', str(res.data))
-
-    # def test_api_can_get_all_bucketlists(self):
-    #     """Test API can get a bucketlist (GET request)."""
-    #     res = self.client().post('/bucketlists/', data=self.bucketlist)
-    #     self.assertEqual(res.status_code, 201)
-    #     res = self.client().get('/bucketlists/')
-    #     self.assertEqual(res.status_code, 200)
-    #     self.assertIn('Go to Borabora', str(res.data))
-
-    # def test_api_can_get_bucketlist_by_id(self):
-    #     """Test API can get a single bucketlist by using it's id."""
-    #     rv = self.client().post('/bucketlists/', data=self.bucketlist)
-    #     self.assertEqual(rv.status_code, 201)
-    #     result_in_json = json.loads(rv.data.decode('utf-8').replace("'", "\""))
-    #     result = self.client().get(
-    #         '/bucketlists/{}'.format(result_in_json['id']))
-    #     self.assertEqual(result.status_code, 200)
-    #     self.assertIn('Go to Borabora', str(result.data))
-
-    # def test_bucketlist_can_be_edited(self):
-    #     """Test API can edit an existing bucketlist. (PUT request)"""
-    #     rv = self.client().post(
-    #         '/bucketlists/',
-    #         data={'name': 'Eat, pray and love'})
-    #     self.assertEqual(rv.status_code, 201)
-    #     rv = self.client().put(
-    #         '/bucketlists/1',
-    #         data={
-    #             "name": "Dont just eat, but also pray and love :-)"
-    #         })
-    #     self.assertEqual(rv.status_code, 200)
-    #     results = self.client().get('/bucketlists/1')
-    #     self.assertIn('Dont just eat', str(results.data))
-
-    # def test_bucketlist_deletion(self):
-    #     """Test API can delete an existing bucketlist. (DELETE request)."""
-    #     rv = self.client().post(
-    #         '/bucketlists/',
-    #         data={'name': 'Eat, pray and love'})
-    #     self.assertEqual(rv.status_code, 201)
-    #     res = self.client().delete('/bucketlists/1')
-    #     self.assertEqual(res.status_code, 200)
-    #     # Test to see if it exists, should return a 404
-    #     result = self.client().get('/bucketlists/1')
-    #     self.assertEqual(result.status_code, 404)
-
-    # def tearDown(self):
-    #     """teardown all initialized variables."""
-    #     with self.app.app_context():
-    #         # drop all tables
-    #         db.session.remove()
-    #         db.drop_all()
-
 
 # Make the tests conveniently executable
 if __name__ == "__main__":
