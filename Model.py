@@ -11,11 +11,13 @@ db = SQLAlchemy()
 class NewsArticle(db.Model):
     __tablename__ = 'news'
     id = db.Column(db.Integer, primary_key = True)
+    title = db.Column(db.String(80),nullable = False)
     article = db.Column(db.String(700), nullable = False)
     status = db.Column(db.Integer, nullable = False)
     creation_date = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable = False)
 
     def __init__(self,article,status):
+        self.title = title
         self.article = article
         self.status = status
 
@@ -50,6 +52,7 @@ class NewsTopic(db.Model):
 
 class NewsArticleSchema(ma.Schema):
     id = fields.Integer()
+    title = fields.String()
     article = fields.String()
     status = fields.Integer()
     creation_date = fields.DateTime()
@@ -69,3 +72,4 @@ class NewsTopicSchema(ma.Schema):
     idNews = fields.Integer()
     idTopic = fields.Integer()
     creation_date = fields.DateTime()
+
