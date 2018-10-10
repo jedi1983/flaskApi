@@ -10,7 +10,7 @@ class News(Resource):
 	# Get All News From News Table
 	def get(self):
 		news = NewsArticle.query.all()
-		newses = NewsArticle_schemas.dump(status).data
+		newses = NewsArticle_schemas.dump(news).data
 		return {'status': 'success', 'data': newses}, 200
 
 	# Post Data To Insert New News
@@ -67,5 +67,5 @@ class News(Resource):
 		if not news:
 			return{'message': 'News Already Deleted'},400
 		db.session.commit()
-		result = NewsArticle_schema.dump(status).data
+		result = NewsArticle_schema.dump(news).data
 		return {"status": 'success', "data": result}, 204

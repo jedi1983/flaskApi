@@ -16,7 +16,7 @@ class NewsArticle(db.Model):
     status = db.Column(db.Integer, nullable = False)
     creation_date = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable = False)
 
-    def __init__(self,article,status):
+    def __init__(self,article,status,title):
         self.title = title
         self.article = article
         self.status = status
@@ -71,5 +71,11 @@ class NewsTopicSchema(ma.Schema):
     id = fields.Integer()
     idNews = fields.Integer()
     idTopic = fields.Integer()
+    creation_date = fields.DateTime()
+
+class NewsTopicAddedSchema(ma.Schema):
+    id = fields.Integer()
+    idNews = fields.Integer()
+    idTopic = fields.String()
     creation_date = fields.DateTime()
 

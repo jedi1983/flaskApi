@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import request
 from Model import db, NewsArticle, NewsArticleSchema
-from Model import db, NewsTopic, NewsTopicSchema
+from Model import db, NewsTopic, NewsTopicSchema, NewsTopicAddedSchema
 
 NewsArticle_schemas = NewsArticleSchema(many=True)
 NewsArticle_schema = NewsArticleSchema()
@@ -9,23 +9,36 @@ NewsArticle_schema = NewsArticleSchema()
 NewsTopic_schemas = NewsTopicSchema(many=True)
 NewsTopic_schema = NewsTopicSchema()
 
+NewsTopicMany_schemas = NewsTopicAddedSchema()
+
 
 class TopicNews(Resource):
 
-	# get all topic available
-	def get(self):
-		news = NewsArticle.query.all()
-		newses = NewsArticle_schemas.dump(status).data
-		return {'status': 'success', 'data': newses}, 200
-
-	# put some topic tag to news
-	def put(self):
-		pass
-
 	# add some new topic to list
 	def post(self):
-		pass
+		json_data = request.get_json(force=True)
+		if not json_data:
+			return{'message': 'No input data provided'}, 400
+		# do validation and deserialize data
+		data, errors = NewsTopicMany_schemas.load(json_data)
 
-	# delete a topic
-	def delete(self):
-		pass
+		if errors:
+			return error, 422
+
+		newsId = json_data['idNews']
+		listOfIdTopic = json_data['idTopic']
+		listWillBeAdded = []
+		tmp = ''
+		for x in listOfIdTopic:
+			if x != ',':
+				tmp = x
+				listWillBeAdded.append(int(x))
+
+		for dataInsert in listWillBeAdded:
+
+			news = NewsTopic(idTopic = dataInsert,idNews = newsId)
+			db.session.add(news)
+			db.session.commit()
+			
+		result = NewsTopicMany_schemas.dump(data).data
+		return {'status': 'success','data':result},201	
