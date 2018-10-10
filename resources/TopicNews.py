@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import request
-from Model import db, NewsArticle, NewsArticleSchema
-from Model import db, NewsTopic, NewsTopicSchema, NewsTopicAddedSchema
+from Model import db, NewsArticle, NewsArticleSchema, NewsTopic, NewsTopicSchema, NewsTopicAddedSchema
+
 
 NewsArticle_schemas = NewsArticleSchema(many=True)
 NewsArticle_schema = NewsArticleSchema()

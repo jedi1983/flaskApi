@@ -1,17 +1,29 @@
 from flask_restful import Resource
+from sqlalchemy.orm import load_only
 from flask import request
-from Model import db, NewsArticle, NewsArticleSchema
-from Model import db, NewsTopic, NewsTopicSchema
+from Model import db, NewsArticle, NewsArticleSchema, NewsTopic, NewsTopicSchema
 
+NewsTopic_Schemas = NewsTopicSchema(many=True)
+NewsTopic_Schema = NewsTopicSchema()
+
+NewsArticle_Schemas = NewsArticleSchema(many = True)
+NewsArticle_Schema = NewsArticleSchema()
 
 class NewsByTopic(Resource):
 
-	# Find News By Category Topic ID and Status
-	def post(self,id):
-		# Find News By Status ID (draft,release,delete)
-		if id == 1:
-			pass
-		# Find News By Topic Category Id (1,2,3) anything
-		elif id == 2:
-			pass
+	def get(self,topic):
+		datax = []
+		for x in topic:
+			if x !=',' and x != '"' :
+				datax.append(int(x))
+
+		# Get News ID with Topic Stated
+		newsID = NewsTopic.query.filter(NewsTopic.idTopic.in_(datax))
+		xData = NewsTopic_Schemas.dump(newsID).data
+		del datax [:]
+		for x in xData:
+			datax.append(x['idNews'])
+		Article = NewsArticle.query.filter(NewsArticle.id.in_(datax))
+		datas = NewsArticle_Schemas.dump(Article).data
+		return {'status': 'success', 'data': datas}, 200
 
